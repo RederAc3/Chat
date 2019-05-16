@@ -2,12 +2,12 @@ const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
 
-const UserService = require('./UserService');
-const userService = new UserService();
-
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
+
+const UserService = require('./UserService');
+const userService = new UserService();
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 });
 
 io.on('conection', (socket) => {
-
+    console.log('kolejny uczestnik');
     socket.on('join', (name) => {
         userService.addUser({
             id: socket.id,

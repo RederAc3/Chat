@@ -1,13 +1,13 @@
 const path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var OptimizeJsPlugin = require('optimize-js-plugin');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeJsPlugin = require('optimize-js-plugin');
 
 var env = process.env.NODE_ENV || 'development';
 console.log('NODE_ENV: ', env);
 
-var plugins = [
+const plugins = [
 	new HtmlWebpackPlugin({
 		template: 'client/index.html',
 		filename: 'index.html',
@@ -39,9 +39,6 @@ module.exports = {
 				test: /\.js$/,
 				exclude: '/node_modules',
                 loader: "babel-loader",
-                // query: {
-                //     babelrc: false,
-                // }
 			},
 			{
 				test: /\.css$/,

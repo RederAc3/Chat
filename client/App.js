@@ -18,6 +18,40 @@ class App extends Component {
         this.state = { users: [], messages: [], text: '', name: '' };
     }
 
+    componentDidMount() {
+        socket.on('message', message => this.messageReceive(message));
+     console.log(this.chatUpdate);
+        socket.on('update', ({ users }) => this.chatUpdate(users));
+    }
+
+    messageReceive(message) {
+        const messages = [message, ...this.state.messages];
+        this.setState({ messages });
+    }
+
+    chatUpdate(users) {
+        this.setState({ users });
+    }
+
+    handleMessageSubmit(message) {
+        const messages = [message, ...this.state.messages];
+        this.setState({ messages });
+        socket.emit('message', message);
+    }
+
+    handleUserSubmit(name) {
+        this.setState({ name });
+        socket.emit('join', name);
+    }
+
+    renderUserForm() {
+        return (<UserForm onUserSubmit={name => this.handleUserSubmit(name)} />)
+    }
+
+    render() {
+        return this.state.name !== '' ? this.renderLayout() : this.renderUserForm();
+    }
+
     renderLayout() {
         return (
             <div className={styles.App}>
@@ -45,40 +79,6 @@ class App extends Component {
                 </div>
             </div>
         );
-    }
-
-    componentDidMount() {
-        socket.on('message', message => this.messageReceive(message));
-        socket.on('update', ({ users }) => this.chatUpdate(users));
-    }
-
-    messageRecive() {
-        const messages = [message, ...this.state.messages];
-        this.setState({ messages });
-    }
-
-
-    chatUpdate(users) {
-        this.setState({ users });
-    }
-
-    handleMessageSubmit(message) {
-        const messages = [message, ...this.state.messages];
-        this.setState({ messages });
-        socket.emit('message', message);
-    }
-
-    handleUserSubmit(name) {
-        this.setState({ name });
-        socket.emit('join', name);
-    }
-
-    renderUserForm() {
-        return (<UserForm onUserSubmit={name => this.handleUserSubmit(name)} />);
-    }
-
-    render() {
-        return this.state.name !== '' ? this.renderLayout() : this.renderUserForm();
     }
 };
 
